@@ -1,0 +1,22 @@
+FROM localhost/nextcloud-apache:32.0.8
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install packages, generate UTF-8 locale, then install smbclient/php extension
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y --no-install-recommends \
+      locales \
+      smbclient \
+      libsmbclient-dev \
+ && sed -i 's/^# *\(de_CH.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && update-locale LANG=de_CH.UTF-8 LC_ALL=de_CH.UTF-8 \
+ && pecl install smbclient \
+ && docker-php-ext-enable smbclient \
+ && rm -rf /var/lib/apt/lists/*
+
+# Make sure processes (Apache/PHP) run with UTF-8 locale
+ENV LANG=de_CH.UTF-8 \
+    LANGUAGE=de_CH:de \
+    LC_ALL=de_CH.UTF-8
