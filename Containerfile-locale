@@ -1,4 +1,4 @@
-FROM localhost/nextcloud-apache:33.0.3
+FROM localhost/nextcloud-apache:33.0.6
 
 ENV DEBIAN_FRONTEND=noninteractive
 
